@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
 use App\Http\Controllers\Admin\KategoriController as AdminKategoriController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\BookController as ApiBookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,8 +38,18 @@ Route::prefix('buku')->name('buku.')->group(function () {
         Route::get('/{buku}/baca', [BukuController::class, 'baca'])->name('baca');
         Route::post('/{buku}/bookmark', [BukuController::class, 'toggleBookmark'])->name('bookmark');
         Route::post('/{buku}/rating', [BukuController::class, 'rating'])->name('rating');
+
+        // Page-specific bookmark
+        Route::post('/{buku}/bookmark-page', [BukuController::class, 'addPageBookmark'])->name('bookmark.page');
+        Route::get('/{buku}/bookmarks', [BukuController::class, 'getBookmarks'])->name('bookmarks');
+        Route::delete('/{buku}/bookmarks/{bookmark}', [BukuController::class, 'deleteBookmark'])->name('bookmark.delete');
     });
 });
+
+// Download route
+Route::get('/download/{buku}', [ApiBookController::class, 'downloadBook'])
+    ->name('download.buku')
+    ->middleware('auth');
 
 // User profile routes
 Route::middleware('auth')->prefix('profile')->name('profile.')->group(function () {
@@ -79,16 +90,37 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
 // API routes for AJAX requests
 Route::middleware('auth')->prefix('api')->name('api.')->group(function () {
-    Route::post('/buku/{buku}/update-progress', [BukuController::class, 'updateProgress'])->name('update.progress');
+    // Reading progress
+    Route::post('/buku/{buku}/update-progress', [ApiBookController::class, 'updateProgress'])->name('update.progress');
+
+    // Book interaction
+    Route::post('/buku/{buku}/view', [ApiBookController::class, 'trackView'])->name('track.view');
+    Route::get('/buku/{buku}/pdf-info', [ApiBookController::class, 'getPdfFile'])->name('pdf.info');
+    Route::get('/buku/{buku}/stats', [ApiBookController::class, 'getReadingStats'])->name('reading.stats');
+    Route::get('/buku/{buku}/preview', [ApiBookController::class, 'getPreview'])->name('preview');
+
+    // Bookmarks API
+    Route::post('/buku/{buku}/bookmark-page', [ApiBookController::class, 'addPageBookmark'])->name('bookmark.page');
+    Route::get('/buku/{buku}/bookmarks', [ApiBookController::class, 'getBookmarks'])->name('bookmarks');
+    Route::delete('/buku/{buku}/bookmarks/{bookmark}', [ApiBookController::class, 'deleteBookmark'])->name('bookmark.delete');
+
+    // Search
+    Route::get('/search-books', [ApiBookController::class, 'search'])->name('search.books');
     Route::get('/recommendations', [HomeController::class, 'getRecommendations'])->name('recommendations');
-    Route::get('/search-books', [BukuController::class, 'searchBooks'])->name('search.books');
 });
 
 // Additional utility routes
-Route::get('/download/{buku}', [BukuController::class, 'downloadBuku'])->name('download.buku')->middleware('auth');
 Route::get('/preview/{buku}', [BukuController::class, 'previewBuku'])->name('preview.buku');
 
 // Search and filter routes
 Route::get('/search', [BukuController::class, 'search'])->name('search');
 Route::get('/kategori/{kategori}', [BukuController::class, 'byKategori'])->name('kategori.show');
 Route::get('/jenis/{jenis}', [BukuController::class, 'byJenis'])->name('jenis.show');
+
+// CORS preflight handling for API routes
+Route::options('api/{any}', function () {
+    return response('', 200)
+        ->header('Access-Control-Allow-Origin', '*')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-CSRF-TOKEN');
+})->where('any', '.*');

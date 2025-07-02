@@ -14,11 +14,23 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #2d2d2d;
+            --accent-color: #007bff;
+            --text-color: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #444;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+        }
+
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #fafafa;
-            color: #333;
-            line-height: 1.7;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         /* Reader Header */
@@ -28,14 +40,14 @@
             left: 0;
             right: 0;
             height: 70px;
-            background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-            border-bottom: 1px solid #e3f2fd;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(66, 165, 245, 0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s ease;
         }
 
@@ -49,24 +61,25 @@
         }
 
         .back-btn {
-            background: none;
-            border: none;
-            color: #42a5f5;
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
             font-size: 18px;
             cursor: pointer;
             padding: 10px;
-            border-radius: 50%;
-            margin-right: 15px;
+            border-radius: 8px;
+            margin-right: 20px;
             transition: all 0.3s;
         }
 
         .back-btn:hover {
-            background: #e3f2fd;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         .book-title {
             font-size: 18px;
-            color: #2c3e50;
+            color: var(--text-color);
             font-weight: 600;
             max-width: 300px;
             white-space: nowrap;
@@ -81,11 +94,11 @@
         }
 
         .header-btn {
-            background: none;
-            border: 1px solid #e3f2fd;
-            color: #42a5f5;
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s;
@@ -95,31 +108,79 @@
         }
 
         .header-btn:hover {
-            background: #e3f2fd;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         .header-btn.active {
-            background: #42a5f5;
-            color: white;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
-        /* Reading Container */
-        .reading-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 100px 20px 120px;
-            min-height: 100vh;
+        /* PDF Viewer Container */
+        .pdf-container {
+            margin-top: 70px;
+            margin-bottom: 120px;
+            display: flex;
+            justify-content: center;
+            min-height: calc(100vh - 190px);
+            background: var(--darker-bg);
+            padding: 20px;
         }
 
-        .reading-content {
+        .pdf-viewer {
             background: white;
-            padding: 60px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(66, 165, 245, 0.1);
-            border: 1px solid #e3f2fd;
-            font-size: 18px;
-            line-height: 1.8;
-            text-align: justify;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+        }
+
+        #pdf-canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            background: white;
+        }
+
+        .pdf-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 600px;
+            background: white;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e3e3e3;
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error-message {
+            text-align: center;
+            color: #dc3545;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            margin: 20px;
         }
 
         /* Reading Controls */
@@ -128,11 +189,11 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-            border-top: 1px solid #e3f2fd;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-top: 1px solid var(--border-color);
             padding: 20px;
             z-index: 1000;
-            box-shadow: 0 -2px 10px rgba(66, 165, 245, 0.1);
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s ease;
         }
 
@@ -141,7 +202,7 @@
         }
 
         .controls-container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -156,38 +217,39 @@
         }
 
         .nav-btn {
-            background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+            background: linear-gradient(135deg, var(--accent-color) 0%, #0056b3 100%);
             color: white;
             border: none;
             padding: 12px 20px;
-            border-radius: 25px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-weight: 500;
         }
 
         .nav-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(66, 165, 245, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
         }
 
         .nav-btn:disabled {
-            background: #e0e0e0;
-            color: #999;
+            background: var(--secondary-color);
+            color: var(--text-secondary);
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
         .page-info {
-            background: white;
+            background: var(--secondary-color);
             padding: 10px 20px;
-            border-radius: 20px;
-            border: 1px solid #e3f2fd;
-            color: #546e7a;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
             font-weight: 500;
             min-width: 120px;
             text-align: center;
@@ -202,15 +264,16 @@
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: #e3f2fd;
+            background: var(--secondary-color);
             border-radius: 4px;
             overflow: hidden;
             cursor: pointer;
+            border: 1px solid var(--border-color);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+            background: linear-gradient(135deg, var(--accent-color) 0%, #0056b3 100%);
             transition: width 0.3s ease;
             border-radius: 4px;
         }
@@ -222,11 +285,11 @@
         }
 
         .tool-btn {
-            background: white;
-            border: 1px solid #e3f2fd;
-            color: #42a5f5;
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
             padding: 10px;
-            border-radius: 50%;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             transition: all 0.3s;
@@ -238,12 +301,13 @@
         }
 
         .tool-btn:hover {
-            background: #e3f2fd;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         .tool-btn.active {
-            background: #42a5f5;
-            color: white;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         /* Settings Panel */
@@ -253,13 +317,13 @@
             right: -350px;
             width: 350px;
             height: calc(100vh - 70px);
-            background: white;
-            border-left: 1px solid #e3f2fd;
+            background: var(--primary-color);
+            border-left: 1px solid var(--border-color);
             padding: 30px;
             z-index: 999;
             transition: right 0.3s ease;
             overflow-y: auto;
-            box-shadow: -5px 0 20px rgba(66, 165, 245, 0.1);
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.5);
         }
 
         .settings-panel.open {
@@ -272,12 +336,14 @@
 
         .settings-title {
             font-size: 16px;
-            color: #2c3e50;
+            color: var(--text-color);
             margin-bottom: 15px;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
         }
 
         .setting-item {
@@ -286,7 +352,7 @@
 
         .setting-label {
             display: block;
-            color: #546e7a;
+            color: var(--text-secondary);
             margin-bottom: 8px;
             font-size: 14px;
         }
@@ -294,40 +360,47 @@
         .setting-control {
             width: 100%;
             padding: 10px 12px;
-            border: 1px solid #e3f2fd;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            background: white;
-            color: #2c3e50;
+            background: var(--secondary-color);
+            color: var(--text-color);
         }
 
-        .font-size-controls {
+        .setting-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .zoom-controls {
             display: flex;
             align-items: center;
             gap: 15px;
         }
 
-        .font-btn {
-            background: #f8faff;
-            border: 1px solid #e3f2fd;
-            color: #42a5f5;
+        .zoom-btn {
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
             padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s;
         }
 
-        .font-btn:hover {
-            background: #e3f2fd;
+        .zoom-btn:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
-        .font-size-display {
-            background: white;
-            border: 1px solid #e3f2fd;
+        .zoom-display {
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
             padding: 8px 15px;
             border-radius: 6px;
-            min-width: 60px;
+            min-width: 80px;
             text-align: center;
-            color: #2c3e50;
+            color: var(--text-color);
             font-weight: 500;
         }
 
@@ -338,13 +411,13 @@
             left: -350px;
             width: 350px;
             height: calc(100vh - 70px);
-            background: white;
-            border-right: 1px solid #e3f2fd;
+            background: var(--primary-color);
+            border-right: 1px solid var(--border-color);
             padding: 30px;
             z-index: 999;
             transition: left 0.3s ease;
             overflow-y: auto;
-            box-shadow: 5px 0 20px rgba(66, 165, 245, 0.1);
+            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.5);
         }
 
         .bookmarks-panel.open {
@@ -353,66 +426,60 @@
 
         .bookmark-item {
             padding: 15px;
-            border: 1px solid #e3f2fd;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
             margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.3s;
+            background: var(--secondary-color);
         }
 
         .bookmark-item:hover {
-            background: #f8faff;
-            border-color: #42a5f5;
+            background: var(--accent-color);
+            border-color: var(--accent-color);
         }
 
         .bookmark-page {
             font-weight: 600;
-            color: #42a5f5;
+            color: var(--accent-color);
             margin-bottom: 5px;
         }
 
         .bookmark-preview {
             font-size: 14px;
-            color: #546e7a;
+            color: var(--text-secondary);
             line-height: 1.4;
         }
 
-        /* Reading Themes */
-        .theme-sepia .reading-content {
-            background: #f4f1ea;
-            color: #5c4b37;
+        /* Page Input */
+        .page-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .theme-sepia body {
-            background: #f0ead6;
+        .page-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--secondary-color);
+            color: var(--text-color);
+            text-align: center;
         }
 
-        .theme-dark .reading-content {
-            background: #1a1a1a;
-            color: #e0e0e0;
-        }
-
-        .theme-dark body {
-            background: #121212;
-        }
-
-        .theme-dark .reader-header,
-        .theme-dark .reading-controls {
-            background: #1e1e1e;
-            border-color: #333;
-        }
-
-        .theme-dark .book-title {
-            color: #e0e0e0;
+        .go-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .reading-content {
-                padding: 30px 20px;
-                font-size: 16px;
-            }
-
             .controls-container {
                 flex-direction: column;
                 gap: 15px;
@@ -421,6 +488,7 @@
             .progress-container {
                 max-width: 100%;
                 order: -1;
+                margin: 0;
             }
 
             .settings-panel,
@@ -437,38 +505,56 @@
             .book-title {
                 max-width: 200px;
             }
-        }
 
-        /* Animation for page turns */
-        .page-turn-animation {
-            animation: pageTurn 0.5s ease-in-out;
-        }
-
-        @keyframes pageTurn {
-            0% {
-                opacity: 0.7;
-                transform: translateX(20px);
+            .pdf-container {
+                padding: 10px;
             }
 
-            100% {
-                opacity: 1;
-                transform: translateX(0);
+            .header-right {
+                gap: 10px;
+            }
+
+            .header-btn span {
+                display: none;
             }
         }
 
-        /* Selection highlight */
-        ::selection {
-            background: rgba(66, 165, 245, 0.2);
+        /* Fullscreen mode */
+        .fullscreen-mode .reader-header {
+            display: none;
         }
 
-        /* Loading state */
+        .fullscreen-mode .reading-controls {
+            display: none;
+        }
+
+        .fullscreen-mode .pdf-container {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        /* Theme variations */
+        .theme-sepia {
+            --dark-bg: #f4f1ea;
+            --primary-color: #8b7355;
+            --secondary-color: #a0956b;
+            --text-color: #5c4b37;
+            --text-secondary: #7a6b57;
+        }
+
+        .theme-sepia .pdf-viewer {
+            filter: sepia(0.3);
+        }
+
+        /* Loading overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(0, 0, 0, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -483,31 +569,35 @@
             visibility: visible;
         }
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #e3f2fd;
-            border-top: 4px solid #42a5f5;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 10000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .notification.show {
+            transform: translateX(0);
         }
     </style>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <body>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+        <div>
+            <div class="loading-spinner"></div>
+            <p style="color: white; margin-top: 20px;">Memuat buku...</p>
+        </div>
     </div>
 
     <!-- Reader Header -->
@@ -552,37 +642,30 @@
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-group">
             <div class="settings-title">
-                <i class="fas fa-font"></i> Pengaturan Teks
+                <i class="fas fa-search"></i> Kontrol Zoom
             </div>
 
             <div class="setting-item">
-                <label class="setting-label">Ukuran Font</label>
-                <div class="font-size-controls">
-                    <button class="font-btn" onclick="changeFontSize(-2)">A-</button>
-                    <div class="font-size-display" id="fontSizeDisplay">18px</div>
-                    <button class="font-btn" onclick="changeFontSize(2)">A+</button>
+                <label class="setting-label">Zoom Level</label>
+                <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="changeZoom(-0.2)">-</button>
+                    <div class="zoom-display" id="zoomDisplay">100%</div>
+                    <button class="zoom-btn" onclick="changeZoom(0.2)">+</button>
                 </div>
             </div>
 
             <div class="setting-item">
-                <label class="setting-label">Jenis Font</label>
-                <select class="setting-control" onchange="changeFont(this.value)">
-                    <option value="Georgia, serif">Georgia (Default)</option>
-                    <option value="Times New Roman, serif">Times New Roman</option>
-                    <option value="Arial, sans-serif">Arial</option>
-                    <option value="Helvetica, sans-serif">Helvetica</option>
-                    <option value="Verdana, sans-serif">Verdana</option>
-                </select>
+                <button class="setting-control" onclick="fitToWidth()"
+                    style="background: var(--accent-color); color: white;">
+                    <i class="fas fa-arrows-alt-h"></i> Sesuaikan Lebar
+                </button>
             </div>
 
             <div class="setting-item">
-                <label class="setting-label">Spasi Baris</label>
-                <select class="setting-control" onchange="changeLineHeight(this.value)">
-                    <option value="1.4">Rapat</option>
-                    <option value="1.6">Normal</option>
-                    <option value="1.8" selected>Longgar</option>
-                    <option value="2.0">Sangat Longgar</option>
-                </select>
+                <button class="setting-control" onclick="fitToPage()"
+                    style="background: var(--accent-color); color: white;">
+                    <i class="fas fa-expand-arrows-alt"></i> Sesuaikan Halaman
+                </button>
             </div>
         </div>
 
@@ -593,8 +676,8 @@
 
             <div class="setting-item">
                 <button class="setting-control" onclick="changeTheme('default')"
-                    style="background: white; color: #333; border: 2px solid #e3f2fd;">
-                    <i class="fas fa-sun"></i> Terang (Default)
+                    style="background: #333; color: #e0e0e0; border: 2px solid var(--border-color);">
+                    <i class="fas fa-moon"></i> Gelap (Default)
                 </button>
             </div>
 
@@ -604,23 +687,40 @@
                     <i class="fas fa-leaf"></i> Sepia
                 </button>
             </div>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-title">
+                <i class="fas fa-mouse-pointer"></i> Navigasi
+            </div>
 
             <div class="setting-item">
-                <button class="setting-control" onclick="changeTheme('dark')"
-                    style="background: #1a1a1a; color: #e0e0e0; border: 2px solid #333;">
-                    <i class="fas fa-moon"></i> Gelap
-                </button>
+                <label class="setting-label">Langsung ke Halaman</label>
+                <div class="page-input-container">
+                    <input type="number" class="page-input" id="pageInput" min="1" max="{{ $buku->halaman }}"
+                        placeholder="No">
+                    <button class="go-btn" onclick="goToInputPage()">Go</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Reading Container -->
-    <main class="reading-container">
-        <div class="reading-content" id="readingContent">
-            <!-- Content will be loaded here -->
-            <div style="text-align: center; padding: 60px 0; color: #666;">
-                <div class="loading-spinner" style="margin: 0 auto 20px;"></div>
-                <p>Memuat konten buku...</p>
+    <!-- PDF Container -->
+    <main class="pdf-container">
+        <div class="pdf-viewer">
+            <div class="pdf-loading" id="pdfLoading">
+                <div class="loading-spinner"></div>
+                <p>Memuat halaman PDF...</p>
+            </div>
+            <canvas id="pdf-canvas"></canvas>
+            <div class="error-message" id="errorMessage" style="display: none;">
+                <i class="fas fa-exclamation-triangle"
+                    style="font-size: 48px; color: #dc3545; margin-bottom: 15px;"></i>
+                <h3>Gagal Memuat PDF</h3>
+                <p>Terjadi kesalahan saat memuat file PDF. Silakan coba lagi atau hubungi administrator.</p>
+                <button onclick="retryLoadPdf()" class="nav-btn" style="margin-top: 15px;">
+                    <i class="fas fa-redo"></i> Coba Lagi
+                </button>
             </div>
         </div>
     </main>
@@ -656,47 +756,63 @@
                 <button class="tool-btn" onclick="toggleAutoScroll()" id="autoScrollBtn" title="Auto Scroll">
                     <i class="fas fa-play"></i>
                 </button>
-                <button class="tool-btn" onclick="toggleNightMode()" id="nightModeBtn" title="Mode Malam">
-                    <i class="fas fa-moon"></i>
+                <button class="tool-btn" onclick="rotateDocument()" id="rotateBtn" title="Putar">
+                    <i class="fas fa-redo"></i>
                 </button>
             </div>
         </div>
     </footer>
 
     <script>
+        // Include Bookmark Manager
+        $ {
+            bookmarkManager
+        }
+
+        // PDF.js setup
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
         // Reading state
         let currentPage = {{ $halaman }};
         let totalPages = {{ $buku->halaman }};
         let bookId = {{ $buku->id }};
-        let fontSize = 18;
+        let pdfDoc = null;
+        let scale = 1.5;
+        let rotation = 0;
         let autoScrollInterval = null;
         let hideControlsTimeout = null;
 
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
+
         // Initialize reader
         document.addEventListener('DOMContentLoaded', function() {
-            loadBookContent();
+            loadPDF();
             updateProgress();
-            loadBookmarks();
-
-            // Auto-hide controls
+            initializeBookmarkManager();
             setupAutoHideControls();
-
-            // Keyboard shortcuts
             setupKeyboardShortcuts();
-
-            // Load saved preferences
             loadUserPreferences();
+            trackBookView();
         });
 
-        // Load book content
-        function loadBookContent() {
+        // Load PDF
+        async function loadPDF() {
             showLoading();
 
-            // Simulate loading content (replace with actual content loading)
-            setTimeout(() => {
-                const content = generateSampleContent();
-                document.getElementById('readingContent').innerHTML = content;
-                document.getElementById('readingContent').classList.add('page-turn-animation');
+            try {
+                const pdfUrl = '{{ Storage::url($buku->file_path) }}';
+                console.log('Loading PDF from:', pdfUrl);
+
+                pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+                totalPages = pdfDoc.numPages;
+
+                // Update total pages if different from database
+                if (totalPages !== {{ $buku->halaman }}) {
+                    console.log(`PDF has ${totalPages} pages, database shows {{ $buku->halaman }}`);
+                }
+
+                await renderPage(currentPage);
                 hideLoading();
 
                 // Update page controls
@@ -704,49 +820,82 @@
 
                 // Save reading progress
                 saveProgress();
-            }, 1000);
+
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                hideLoading();
+                showError();
+            }
         }
 
-        // Generate sample content (replace with actual book content)
-        function generateSampleContent() {
-            return `
-                <h2 style="color: #2c3e50; margin-bottom: 30px; text-align: center;">
-                    Halaman ${currentPage}
-                </h2>
-                
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                
-                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-                
-                <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-                
-                <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.</p>
-            `;
+        // Render specific page
+        async function renderPage(pageNum) {
+            if (!pdfDoc) return;
+
+            try {
+                document.getElementById('pdfLoading').style.display = 'flex';
+
+                const page = await pdfDoc.getPage(pageNum);
+                const viewport = page.getViewport({
+                    scale: scale,
+                    rotation: rotation
+                });
+
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+
+                await page.render(renderContext).promise;
+                document.getElementById('pdfLoading').style.display = 'none';
+
+                // Update page input max value
+                document.getElementById('pageInput').max = totalPages;
+
+            } catch (error) {
+                console.error('Error rendering page:', error);
+                document.getElementById('pdfLoading').style.display = 'none';
+                showError();
+            }
         }
 
         // Navigation functions
-        function nextPage() {
+        async function nextPage() {
             if (currentPage < totalPages) {
                 currentPage++;
-                loadBookContent();
+                await renderPage(currentPage);
+                updatePageControls();
+                saveProgress();
             }
         }
 
-        function previousPage() {
+        async function previousPage() {
             if (currentPage > 1) {
                 currentPage--;
-                loadBookContent();
+                await renderPage(currentPage);
+                updatePageControls();
+                saveProgress();
             }
         }
 
-        function goToPage(page) {
-            if (page >= 1 && page <= totalPages) {
+        async function goToPage(page) {
+            if (page >= 1 && page <= totalPages && page !== currentPage) {
                 currentPage = page;
-                loadBookContent();
+                await renderPage(currentPage);
+                updatePageControls();
+                saveProgress();
+            }
+        }
+
+        function goToInputPage() {
+            const pageInput = document.getElementById('pageInput');
+            const page = parseInt(pageInput.value);
+            if (page && page >= 1 && page <= totalPages) {
+                goToPage(page);
+                pageInput.value = '';
             }
         }
 
@@ -754,6 +903,7 @@
             document.getElementById('prevBtn').disabled = currentPage <= 1;
             document.getElementById('nextBtn').disabled = currentPage >= totalPages;
             document.getElementById('pageInfo').textContent = `Hal. ${currentPage} dari ${totalPages}`;
+            updateProgress();
         }
 
         function updateProgress() {
@@ -770,6 +920,37 @@
             goToPage(targetPage);
         }
 
+        // Zoom functions
+        function changeZoom(delta) {
+            scale = Math.max(0.5, Math.min(3.0, scale + delta));
+            document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
+            renderPage(currentPage);
+            saveUserPreferences();
+        }
+
+        function fitToWidth() {
+            const container = document.querySelector('.pdf-viewer');
+            scale = (container.clientWidth - 40) / canvas.width * scale;
+            document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
+            renderPage(currentPage);
+            saveUserPreferences();
+        }
+
+        function fitToPage() {
+            const container = document.querySelector('.pdf-viewer');
+            const scaleX = (container.clientWidth - 40) / canvas.width * scale;
+            const scaleY = (container.clientHeight - 40) / canvas.height * scale;
+            scale = Math.min(scaleX, scaleY);
+            document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
+            renderPage(currentPage);
+            saveUserPreferences();
+        }
+
+        function rotateDocument() {
+            rotation = (rotation + 90) % 360;
+            renderPage(currentPage);
+        }
+
         // Save progress to server
         function saveProgress() {
             fetch(`/api/buku/${bookId}/update-progress`, {
@@ -784,8 +965,6 @@
             }).catch(error => {
                 console.error('Error saving progress:', error);
             });
-
-            updateProgress();
         }
 
         // Settings functions
@@ -809,23 +988,6 @@
             document.getElementById('bookmarksPanel').classList.remove('open');
         }
 
-        function changeFontSize(delta) {
-            fontSize = Math.max(12, Math.min(28, fontSize + delta));
-            document.getElementById('readingContent').style.fontSize = fontSize + 'px';
-            document.getElementById('fontSizeDisplay').textContent = fontSize + 'px';
-            saveUserPreferences();
-        }
-
-        function changeFont(fontFamily) {
-            document.getElementById('readingContent').style.fontFamily = fontFamily;
-            saveUserPreferences();
-        }
-
-        function changeLineHeight(lineHeight) {
-            document.getElementById('readingContent').style.lineHeight = lineHeight;
-            saveUserPreferences();
-        }
-
         function changeTheme(theme) {
             document.body.className = theme !== 'default' ? 'theme-' + theme : '';
             saveUserPreferences();
@@ -842,7 +1004,8 @@
                 btn.classList.remove('active');
             } else {
                 autoScrollInterval = setInterval(() => {
-                    window.scrollBy(0, 1);
+                    const container = document.querySelector('.pdf-container');
+                    container.scrollBy(0, 2);
                 }, 50);
                 btn.innerHTML = '<i class="fas fa-pause"></i>';
                 btn.classList.add('active');
@@ -856,41 +1019,26 @@
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().then(() => {
                     btn.innerHTML = '<i class="fas fa-compress"></i><span>Exit Fullscreen</span>';
+                    document.body.classList.add('fullscreen-mode');
                 });
             } else {
                 document.exitFullscreen().then(() => {
                     btn.innerHTML = '<i class="fas fa-expand"></i><span>Fullscreen</span>';
+                    document.body.classList.remove('fullscreen-mode');
                 });
             }
         }
 
-        // Bookmark functions
+        // Enhanced addBookmark function
         function addBookmark() {
-            fetch(`/buku/${bookId}/bookmark-page`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        halaman: currentPage
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        loadBookmarks();
-                        showNotification('Bookmark ditambahkan');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error adding bookmark:', error);
-                });
+            showBookmarkModal();
         }
 
+        // Enhanced loadBookmarks function
         function loadBookmarks() {
-            // Load bookmarks from server
-            // Implementation depends on your bookmark system
+            if (bookmarkManager) {
+                bookmarkManager.loadBookmarks();
+            }
         }
 
         // Auto-hide controls
@@ -930,17 +1078,32 @@
         // Keyboard shortcuts
         function setupKeyboardShortcuts() {
             document.addEventListener('keydown', function(e) {
+                // Prevent default for arrow keys and space to avoid page scrolling
+                if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '].includes(e.key)) {
+                    e.preventDefault();
+                }
+
                 switch (e.key) {
                     case 'ArrowLeft':
                     case 'ArrowUp':
-                        e.preventDefault();
                         previousPage();
                         break;
                     case 'ArrowRight':
                     case 'ArrowDown':
                     case ' ':
-                        e.preventDefault();
                         nextPage();
+                        break;
+                    case '+':
+                    case '=':
+                        changeZoom(0.2);
+                        break;
+                    case '-':
+                        changeZoom(-0.2);
+                        break;
+                    case '0':
+                        scale = 1.5;
+                        document.getElementById('zoomDisplay').textContent = '150%';
+                        renderPage(currentPage);
                         break;
                     case 'f':
                     case 'F':
@@ -966,6 +1129,15 @@
                     case 'Escape':
                         closeSettings();
                         closeBookmarks();
+                        if (document.fullscreenElement) {
+                            document.exitFullscreen();
+                        }
+                        break;
+                    case 'Home':
+                        goToPage(1);
+                        break;
+                    case 'End':
+                        goToPage(totalPages);
                         break;
                 }
             });
@@ -974,32 +1146,26 @@
         // User preferences
         function saveUserPreferences() {
             const preferences = {
-                fontSize: fontSize,
-                fontFamily: document.getElementById('readingContent').style.fontFamily,
-                lineHeight: document.getElementById('readingContent').style.lineHeight,
+                scale: scale,
+                rotation: rotation,
                 theme: document.body.className
             };
 
-            localStorage.setItem('readerPreferences', JSON.stringify(preferences));
+            localStorage.setItem('pdfReaderPreferences', JSON.stringify(preferences));
         }
 
         function loadUserPreferences() {
-            const saved = localStorage.getItem('readerPreferences');
+            const saved = localStorage.getItem('pdfReaderPreferences');
             if (saved) {
                 const preferences = JSON.parse(saved);
 
-                if (preferences.fontSize) {
-                    fontSize = preferences.fontSize;
-                    document.getElementById('readingContent').style.fontSize = fontSize + 'px';
-                    document.getElementById('fontSizeDisplay').textContent = fontSize + 'px';
+                if (preferences.scale) {
+                    scale = preferences.scale;
+                    document.getElementById('zoomDisplay').textContent = Math.round(scale * 100) + '%';
                 }
 
-                if (preferences.fontFamily) {
-                    document.getElementById('readingContent').style.fontFamily = preferences.fontFamily;
-                }
-
-                if (preferences.lineHeight) {
-                    document.getElementById('readingContent').style.lineHeight = preferences.lineHeight;
+                if (preferences.rotation) {
+                    rotation = preferences.rotation;
                 }
 
                 if (preferences.theme) {
@@ -1017,25 +1183,32 @@
             document.getElementById('loadingOverlay').classList.remove('show');
         }
 
-        function showNotification(message) {
-            // Simple notification (can be enhanced)
+        function showError() {
+            document.getElementById('pdfLoading').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+
+        function retryLoadPdf() {
+            document.getElementById('errorMessage').style.display = 'none';
+            loadPDF();
+        }
+
+        function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: #4caf50;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                z-index: 10000;
-                animation: slideIn 0.3s ease;
+            notification.className = 'notification show';
+            notification.style.background = type === 'error' ? '#dc3545' : 'var(--accent-color)';
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
+                ${message}
             `;
-            notification.textContent = message;
+
             document.body.appendChild(notification);
 
             setTimeout(() => {
-                notification.remove();
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
             }, 3000);
         }
 
@@ -1047,17 +1220,51 @@
             }
         }
 
-        function toggleNightMode() {
-            const btn = document.getElementById('nightModeBtn');
-            const isDark = document.body.classList.contains('theme-dark');
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
 
-            if (isDark) {
-                changeTheme('default');
-                btn.classList.remove('active');
-            } else {
-                changeTheme('dark');
-                btn.classList.add('active');
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            if (!touchStartX || !touchStartY) {
+                return;
             }
+
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+
+            // Only process horizontal swipes
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                if (diffX > 0) {
+                    // Swipe left - next page
+                    nextPage();
+                } else {
+                    // Swipe right - previous page
+                    previousPage();
+                }
+            }
+
+            touchStartX = 0;
+            touchStartY = 0;
+        });
+
+        // Track book view for analytics
+        function trackBookView() {
+            fetch(`/api/buku/${bookId}/view`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            }).catch(error => {
+                console.error('Error tracking view:', error);
+            });
         }
 
         // Close panels when clicking outside
@@ -1078,6 +1285,9 @@
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
                 saveProgress();
+                if (autoScrollInterval) {
+                    clearInterval(autoScrollInterval);
+                }
             }
         });
 
@@ -1085,6 +1295,66 @@
         window.addEventListener('beforeunload', function() {
             saveProgress();
         });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (pdfDoc && currentPage) {
+                // Re-render current page to fit new window size
+                setTimeout(() => {
+                    renderPage(currentPage);
+                }, 100);
+            }
+        });
+
+        // Double-click to toggle fullscreen
+        document.getElementById('pdf-canvas').addEventListener('dblclick', function() {
+            toggleFullscreen();
+        });
+
+        // Mouse wheel zoom (with Ctrl key)
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                changeZoom(delta);
+            }
+        });
+
+        // Page input enter key
+        document.getElementById('pageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                goToInputPage();
+            }
+        });
+
+        // Error handling for PDF.js
+        window.addEventListener('error', function(e) {
+            if (e.message && e.message.includes('PDF')) {
+                console.error('PDF Error:', e);
+                showError();
+            }
+        });
+
+        // Add bookmark manager script
+        // (Already included above)
+
+        // Performance optimization: Preload next page
+        function preloadNextPage() {
+            if (pdfDoc && currentPage < totalPages) {
+                pdfDoc.getPage(currentPage + 1).then(page => {
+                    // Page is now cached
+                }).catch(error => {
+                    console.log('Preload failed:', error);
+                });
+            }
+        }
+
+        // Call preload after rendering current page
+        function renderPageWithPreload(pageNum) {
+            renderPage(pageNum).then(() => {
+                preloadNextPage();
+            });
+        }
     </script>
 </body>
 
