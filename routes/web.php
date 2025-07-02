@@ -57,6 +57,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Dashboard
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/kategori/by-jenis/{jenis}', [AdminKategoriController::class, 'getByJenis'])
+        ->name('kategori.by-jenis');
     // Buku management
     Route::resource('buku', AdminBukuController::class);
 

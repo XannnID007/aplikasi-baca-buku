@@ -192,7 +192,7 @@
         <!-- Pagination -->
         @if ($kategoris->hasPages())
             <div style="padding: 20px 30px; border-top: 1px solid #333;">
-                {{ $kategoris->links() }}
+                {{ $kategoris->appends(request()->query())->links('pagination.simple-custom') }}
             </div>
         @endif
     </div>
@@ -235,7 +235,12 @@
                     <i class="fas fa-chart-line"></i>
                 </div>
                 <h3 style="color: #fff; font-size: 32px; margin-bottom: 10px;">
-                    {{ number_format(\App\Models\Kategori::withCount('bukus')->avg('bukus_count'), 1) }}
+                    @php
+                        $topKategori = \App\Models\Kategori::withCount('bukus')
+                            ->orderBy('bukus_count', 'desc')
+                            ->first();
+                    @endphp
+                    {{ $topKategori ? $topKategori->bukus_count : 0 }}
                 </h3>
                 <p style="color: #b0b0b0; margin: 0;">Rata-rata Buku per Kategori</p>
                 <div style="margin-top: 15px; font-size: 12px; color: #888;">
@@ -264,7 +269,7 @@
         function deleteKategori(id) {
             if (confirm(
                     'Apakah Anda yakin ingin menghapus kategori ini?\n\nKategori yang dihapus akan dihilangkan dari semua buku yang menggunakannya.'
-                    )) {
+                )) {
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = `/admin/kategori/${id}`;

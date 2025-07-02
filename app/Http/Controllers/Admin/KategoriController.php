@@ -10,6 +10,7 @@ class KategoriController extends Controller
 {
     public function index()
     {
+        // Fix: Use proper withCount method
         $kategoris = Kategori::withCount('bukus')->paginate(10);
         return view('admin.kategori.index', compact('kategoris'));
     }
@@ -60,5 +61,15 @@ class KategoriController extends Controller
     {
         $kategori->delete();
         return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil dihapus!');
+    }
+
+    // Add method for AJAX requests
+    public function getByJenis($jenis)
+    {
+        $kategoris = Kategori::where('jenis', $jenis)
+            ->orderBy('nama')
+            ->get(['id', 'nama', 'deskripsi']);
+
+        return response()->json($kategoris);
     }
 }

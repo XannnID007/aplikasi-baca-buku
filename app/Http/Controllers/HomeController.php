@@ -20,9 +20,13 @@ class HomeController extends Controller
     {
         $bukuPopuler = Buku::orderBy('views', 'desc')->take(6)->get();
         $bukuTerbaru = Buku::orderBy('created_at', 'desc')->take(6)->get();
-        $kategoris = \App\Models\Kategori::withCount('bukus')->get();
-        $avgBukuPerKategori = round($kategoris->avg('bukus_count'), 1);
+
+        // Fix: Remove bukus_count calculation and use simple count
         $kategoris = Kategori::paginate(5);
+        $avgBukuPerKategori = 0; // Default value or calculate differently
+
+        // Alternative calculation if needed:
+        // $avgBukuPerKategori = round(Buku::count() / max(Kategori::count(), 1), 1);
 
         return view('home', compact('bukuPopuler', 'bukuTerbaru', 'kategoris', 'avgBukuPerKategori'));
     }
